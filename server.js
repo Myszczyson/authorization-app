@@ -31,7 +31,16 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', require('./routes/auth.routes'));
+
+app.use(['/user/logged', '/user/profile', '/user/profile/'], (req, res, next) => {
+  if(!req.user) {
+    res.redirect('/user/no-permission');
+  } else {
+    next();
+  }
+});
 app.use('/user', require('./routes/user.routes'));
+
 
 app.use('/', (req, res) => {
   res.status(404).render('notFound');
